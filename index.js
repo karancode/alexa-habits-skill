@@ -2,14 +2,13 @@
 
 const Alexa = require('ask-sdk-core');
 const Habits = require('./habits');
-let counter = 0;
 
 //constants
-WELCOME_MESSAGE = 'Welcome to Habits skill.';
-HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good habit!';
-GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
-ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t understand. Please try again!';
-NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
+const WELCOME_MESSAGE = 'Welcome to Habits skill.';
+const HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good habit!';
+const GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
+const ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t understand. Please try again!';
+const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
 
 // launch-request intent handler
 const LauchRequestHandler = {
@@ -116,7 +115,7 @@ const CancelAndStopIntentHandler = {
 
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
-        return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest'
+        return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
     },
     handle(handlerInput) {
         //cleanup logic
