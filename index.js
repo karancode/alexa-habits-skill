@@ -8,6 +8,7 @@ HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good h
 GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
 ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t understand. Please try again!';
 
+// launch-request intent handler
 const LauchRequestHandler = {
     canHandle(handlerInput){
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
@@ -22,9 +23,30 @@ const LauchRequestHandler = {
     }
 };
 
-//
+// custom intent handlers
+const GetHabitIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+        && (handlerInput.requestEnvelope.request.intent.name === 'GetHabitIntent'
+            || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent'
+            || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StartOverIntent');
+    },
+    handle(handlerInput) {
+        const speechText = getHabitMessage();
 
-//helper handlers
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(speechText)
+            .getResponse();
+    }
+};
+
+// supporting functions
+function getHabitMessage() {
+    return 'This is good habit on random!';
+}
+
+//default intent handlers
 const HelpIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
@@ -92,6 +114,7 @@ exports.handler = async function (event, context) {
                 HelpIntentHandler,
                 CancelAndStopIntentHandler,
                 SessionEndedRequestHandler,
+                GetHabitIntentHandler,
             )
             .addErrorHandlers(
                 ErrorHandler
