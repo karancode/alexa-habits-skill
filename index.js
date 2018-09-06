@@ -1,12 +1,15 @@
 //index.js
 
 const Alexa = require('ask-sdk-core');
+const Habits = require('./habits');
+let counter = 0;
 
 //constants
 WELCOME_MESSAGE = 'Welcome to Habits skill.';
 HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good habit!';
 GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
 ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t understand. Please try again!';
+NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
 
 // launch-request intent handler
 const LauchRequestHandler = {
@@ -14,8 +17,12 @@ const LauchRequestHandler = {
         return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
     },
     handle(handlerInput){
-        const speechText = WELCOME_MESSAGE;
+        // initialize session counter
+        const attributes = handlerInput.attributesManager.getSessionAttributes();
+        attributes.counter = 0;
+        handlerInput.attributesManager.setSessionAttributes(attributes);
 
+        const speechText = WELCOME_MESSAGE;
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt(speechText)
@@ -28,11 +35,12 @@ const GetHabitIntentHandler = {
     canHandle(handlerInput) {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
         && (handlerInput.requestEnvelope.request.intent.name === 'GetHabitIntent'
+            || handlerInput.requestEnvelope.request.intent.name === 'GetNextHabitIntent'    // two custom intents handled by same handler
             || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent'
             || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StartOverIntent');
     },
     handle(handlerInput) {
-        const speechText = getHabitMessage();
+        const speechText = getHabitMessage(handlerInput);
 
         return handlerInput.responseBuilder
             .speak(speechText)
@@ -42,8 +50,37 @@ const GetHabitIntentHandler = {
 };
 
 // supporting functions
-function getHabitMessage() {
-    return 'This is good habit on random!';
+function getHabitMessage(handlerInput) {
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const habit_message = Habits.data[attributes.counter].habit;
+    attributes.counter == attributes.counter + 1;
+    handlerInput.attributesManager.setSessionAttributes(attributes);
+    return habit_message;
+}
+
+const GetHabitReasonIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+        && handlerInput.requestEnvelope.request.intent.name === 'GetHabitReasonIntent';
+    },
+    handle(handlerInput) {
+        const speechText = getHabitReason(handlerInput);
+
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(speechText)
+            .getResponse();
+    }
+};
+
+
+function getHabitReason(handlerInput) {
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    if (attributes.counter - 1 < 0){
+        return NO_HABIT_VALIDATION_MESSAGE;
+    }
+    const habit_reason = Habits.data[attributes.counter - 1].reason;
+    return habit_reason;
 }
 
 //default intent handlers
@@ -115,6 +152,7 @@ exports.handler = async function (event, context) {
                 CancelAndStopIntentHandler,
                 SessionEndedRequestHandler,
                 GetHabitIntentHandler,
+                GetHabitReasonIntentHandler
             )
             .addErrorHandlers(
                 ErrorHandler
