@@ -9,6 +9,8 @@ const HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a 
 const GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
 const ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t understand. Please try again!';
 const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
+const REPEAT_HABIT = 'habit';
+const REPEAT_REASON = 'reason';
 
 // launch-request intent handler
 const LauchRequestHandler = {
@@ -19,6 +21,7 @@ const LauchRequestHandler = {
         // initialize session counter
         const attributes = handlerInput.attributesManager.getSessionAttributes();
         attributes.counter = 0;
+        attributes.repeat = null;
         handlerInput.attributesManager.setSessionAttributes(attributes);
 
         const speechText = WELCOME_MESSAGE;
@@ -39,6 +42,12 @@ const GetHabitIntentHandler = {
             || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StartOverIntent');
     },
     handle(handlerInput) {
+
+        //update repeat-attribute
+        const attributes = handlerInput.attributesManager.getSessionAttributes();
+        attributes.repeat = REPEAT_HABIT;
+        handlerInput.attributesManager.setSessionAttributes(attributes);
+
         const speechText = getHabitMessage(handlerInput);
 
         return handlerInput.responseBuilder
@@ -63,6 +72,12 @@ const GetHabitReasonIntentHandler = {
         && handlerInput.requestEnvelope.request.intent.name === 'GetHabitReasonIntent';
     },
     handle(handlerInput) {
+
+        //update repeat-attribute
+        const attributes = handlerInput.attributesManager.getSessionAttributes();
+        attributes.repeat = REPEAT_REASON;
+        handlerInput.attributesManager.setSessionAttributes(attributes);
+
         const speechText = getHabitReason(handlerInput);
 
         return handlerInput.responseBuilder
@@ -80,6 +95,35 @@ function getHabitReason(handlerInput) {
     }
     const habit_reason = Habits.data[attributes.counter - 1].reason;
     return habit_reason;
+}
+
+const GetRepeatIntentHandler = {
+    canHandle(handlerInput) {
+        return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+        && handlerInput.requestEnvelope.request.intent.name === 'GetRepeatIntent';
+    },
+    handle(handlerInput) {
+        const speechText = getRepeatMessage(handlerInput);
+
+        return handlerInput.responseBuilder
+            .speak(speechText)
+            .reprompt(speechText)
+            .getResponse();
+    }
+}
+
+function getRepeatMessage(handlerInput) {
+    const attributes = handlerInput.attributesManager.getSessionAttributes();
+    const repeat = attributes.repeat;
+    if (attributes.counter - 1 < 0){
+        return NO_HABIT_VALIDATION_MESSAGE;
+    }
+    switch(repeat){
+        case REPEAT_HABIT : 
+            return Habits.data[attributes.counter].habit;
+        case REPEAT_REASON :
+            return Habits.data[attributes.counter - 1].reason;
+    }
 }
 
 //default intent handlers
@@ -151,7 +195,8 @@ exports.handler = async function (event, context) {
                 CancelAndStopIntentHandler,
                 SessionEndedRequestHandler,
                 GetHabitIntentHandler,
-                GetHabitReasonIntentHandler
+                GetHabitReasonIntentHandler,
+                GetRepeatIntentHandler
             )
             .addErrorHandlers(
                 ErrorHandler
