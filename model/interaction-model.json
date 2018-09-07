@@ -27,9 +27,40 @@
                     "name": "GetHabitIntent",
                     "slots": [],
                     "samples": [
+                        "tell me a habit",
                         "Teach me ",
                         "Tell me a good habit",
                         "Something Good"
+                    ]
+                },
+                {
+                    "name": "GetHabitReasonIntent",
+                    "slots": [],
+                    "samples": [
+                        "Reason",
+                        "what's the reason",
+                        "Why is it good ",
+                        "Why"
+                    ]
+                },
+                {
+                    "name": "GetNextHabitIntent",
+                    "slots": [],
+                    "samples": [
+                        "one more",
+                        "Tell me another habit",
+                        "Another habit",
+                        "Next"
+                    ]
+                },
+                {
+                    "name": "GetRepeatIntent",
+                    "slots": [],
+                    "samples": [
+                        "please say again",
+                        "say again",
+                        "please repeat",
+                        "repeat"
                     ]
                 }
             ],
