@@ -120,7 +120,7 @@ function getRepeatMessage(handlerInput) {
     }
     switch(repeat){
         case REPEAT_HABIT : 
-            return Habits.data[attributes.counter].habit;
+            return Habits.data[attributes.counter -1 ].habit;
         case REPEAT_REASON :
             return Habits.data[attributes.counter - 1].reason;
     }
