@@ -61,7 +61,7 @@ const GetHabitIntentHandler = {
 function getHabitMessage(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const habit_message = Habits.data[attributes.counter].habit;
-    attributes.counter == attributes.counter + 1;
+    attributes.counter = attributes.counter + 1;
     handlerInput.attributesManager.setSessionAttributes(attributes);
     return habit_message;
 }
