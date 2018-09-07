@@ -52,6 +52,16 @@
                         "Another habit",
                         "Next"
                     ]
+                },
+                {
+                    "name": "GetRepeatIntent",
+                    "slots": [],
+                    "samples": [
+                        "please say again",
+                        "say again",
+                        "please repeat",
+                        "repeat"
+                    ]
                 }
             ],
             "types": []
