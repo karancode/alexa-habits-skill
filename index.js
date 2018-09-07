@@ -93,7 +93,7 @@ function getHabitReason(handlerInput) {
     if (attributes.counter - 1 < 0){
         return NO_HABIT_VALIDATION_MESSAGE;
     }
-    const habit_reason = Habits.data[attributes.counter - 1].reason;
+    const habit_reason = Habits.data[(attributes.counter - 1)%Habits.data.length].reason;
     return habit_reason;
 }
 
@@ -120,9 +120,9 @@ function getRepeatMessage(handlerInput) {
     }
     switch(repeat){
         case REPEAT_HABIT : 
-            return Habits.data[attributes.counter -1 ].habit;
+            return Habits.data[(attributes.counter -1)%Habits.data.length].habit;
         case REPEAT_REASON :
-            return Habits.data[attributes.counter - 1].reason;
+            return Habits.data[(attributes.counter - 1)%Habits.data.length].reason;
     }
 }
 
