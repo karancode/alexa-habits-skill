@@ -62,6 +62,16 @@
                         "please repeat",
                         "repeat"
                     ]
+                },
+                {
+                    "name": "GetEndIntent",
+                    "slots": [],
+                    "samples": [
+                        "Got it",
+                        "Okay",
+                        "Understood",
+                        "Thank you"
+                    ]
                 }
             ],
             "types": []
