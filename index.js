@@ -12,7 +12,7 @@ const ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t u
 const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
 const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
-const IMAGE_URL = 'https://s8.postimg.cc/z7m0a2mtx/0146c983c664d437b92176be1cc71a90312d69a721_00001_2.jpg';
+const IMAGE_URL = 'https://s3-ap-northeast-1.amazonaws.com/alexa-habit-skill-image/canadian-waterfall.jpg';
 
 // launch-request intent handler
 const LauchRequestHandler = {
@@ -148,7 +148,7 @@ const GetRepeatIntentHandler = {
     },
     handle(handlerInput) {
         const speechText = getRepeatMessage(handlerInput);
-
+        
         return handlerInput.responseBuilder
             .speak(speechText)
             .reprompt(speechText)
