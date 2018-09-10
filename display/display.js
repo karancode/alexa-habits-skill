@@ -1,4 +1,5 @@
 //display.js
+const Alexa = require('ask-sdk-core');
 
 module.exports = {
     supportDisplay : (handlerInput) => {
@@ -11,25 +12,23 @@ module.exports = {
         
         return hasDisplay;
     },
-    getDisplay : (response, display_type, display_habbit, display_reason) => {
+    getDisplay : (response, image, display_type, display_habbit, display_reason) => {
         //const image = new Alexa.ImageHelper().addImageInstance(image_url).getImage();
           
         const myLaunchTextContent = new Alexa.RichTextContentHelper()
-            .withPrimaryText('Welcome to HABITS skill!' + "</br>")
+            .withPrimaryText('Welcome to HABITS skill!<br/>')
             .withSecondaryText('You can ask me for habits and I will teach you good!')
             .withTertiaryText('You can say, \'Tell me a habit...\'')
             .getTextContent();
         
         const myHabitTextContent = new Alexa.RichTextContentHelper()
-            .withPrimaryText('Habit : ' + display_habbit + '</br>')
-            .withSecondaryText('Reason : ' + display_reason + '</br>')
+            .withPrimaryText('Habit : ' + display_habbit + '<br/>')
             .getTextContent();
         
         const myReasonTextContent = new Alexa.RichTextContentHelper()
-            .withPrimaryText('Habit : ' + display_habbit + '</br>')
-            .withSecondaryText('Reason : ' + display_reason + '</br>')
+            .withPrimaryText('Reason : ' + display_reason + '<br/>')
             .getTextContent();
-
+        
 
         if(display_habbit === null && display_reason === null)
         {
