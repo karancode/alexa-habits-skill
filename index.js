@@ -70,7 +70,7 @@ const GetHabitIntentHandler = {
         const speechText = getHabitMessage(handlerInput);
 
         if(Display.supportDisplay(handlerInput)) {
-            const display_type = 'BodyTemplate7';
+            const display_type = 'BodyTemplate2';
             const display_reason = null;
             response = Display.getDisplay(handlerInput.responseBuilder,  
                                         IMAGE_URL,
@@ -113,7 +113,7 @@ const GetHabitReasonIntentHandler = {
         const speechText = getHabitReason(handlerInput);
 
         if(Display.supportDisplay(handlerInput)) {
-            const display_type = 'BodyTemplate7';
+            const display_type = 'BodyTemplate2';
             const display_habbit = null;
             response = Display.getDisplay(handlerInput.responseBuilder,  
                                         IMAGE_URL,
