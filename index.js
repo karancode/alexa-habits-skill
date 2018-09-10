@@ -2,6 +2,7 @@
 
 const Alexa = require('ask-sdk-core');
 const Habits = require('./habits');
+const Display = require('./display/display');
 
 //constants
 const WELCOME_MESSAGE = 'Welcome to Habits skill.';
@@ -11,6 +12,7 @@ const ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t u
 const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
 const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
+const IMAGE_URL = 'https://s8.postimg.cc/z7m0a2mtx/0146c983c664d437b92176be1cc71a90312d69a721_00001_2.jpg';
 
 // launch-request intent handler
 const LauchRequestHandler = {
@@ -23,9 +25,23 @@ const LauchRequestHandler = {
         attributes.counter = 0;
         attributes.repeat = null;
         handlerInput.attributesManager.setSessionAttributes(attributes);
+        
+        var response = "";
+        if(Display.supportDisplay(handlerInput)) {
+            const display_type = 'ListTemplate1';
+            const display_habbit = null;
+            const display_reason = null;
+            response = Display.getDisplay(handlerInput.responseBuilder,  
+                                        display_type, 
+                                        display_habbit, 
+                                        display_reason);
+        }else {
+            response = handlerInput.responseBuilder
+        }
 
         const speechText = WELCOME_MESSAGE;
-        return handlerInput.responseBuilder
+        //return handlerInput.responseBuilder
+        return response
             .speak(speechText)
             .reprompt(speechText)
             .getResponse();
