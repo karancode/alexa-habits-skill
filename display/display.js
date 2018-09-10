@@ -12,8 +12,8 @@ module.exports = {
         
         return hasDisplay;
     },
-    getDisplay : (response, image, display_type, display_habbit, display_reason) => {
-        //const image = new Alexa.ImageHelper().addImageInstance(image_url).getImage();
+    getDisplay : (response, image_url, display_type, display_habbit, display_reason) => {
+        const image = new Alexa.ImageHelper().addImageInstance(image_url).getImage();
           
         const myLaunchTextContent = new Alexa.RichTextContentHelper()
             .withPrimaryText('Welcome to HABITS skill!<br/>')
@@ -35,7 +35,7 @@ module.exports = {
             response.addRenderTemplateDirective({
                 type : display_type,
                 backButton : 'invisible',
-                //backgroundImage : image,
+                backgroundImage : image,
                 title : 'HABIT Skill',
                 textContent : myLaunchTextContent
             });
@@ -45,7 +45,7 @@ module.exports = {
             response.addRenderTemplateDirective({
                 type : display_type,
                 backButton : 'visible',
-                //backgroundImage : image,
+                backgroundImage : image,
                 title : 'Habit - HABIT Skill',
                 textContent : myHabitTextContent
             });
@@ -55,7 +55,7 @@ module.exports = {
             response.addRenderTemplateDirective({
                 type : display_type,
                 backButton : 'visible',
-                //backgroundImage : image,
+                backgroundImage : image,
                 title : 'Reason - HABIT Skill',
                 textContent : myReasonTextContent
             });
