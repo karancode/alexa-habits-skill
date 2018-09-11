@@ -1,0 +1,9 @@
+# The image is saved at amazon-s3 bucket.
+URL : https://s3-ap-northeast-1.amazonaws.com/alexa-habit-skill-image/canadian-waterfall.jpg
+
+# The bucket is publicly available.
+# Bucket policy details : 
+-> https://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html
+-> Granting Read-Only Permission to an Anonymous User
+
+# end

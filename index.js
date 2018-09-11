@@ -2,6 +2,7 @@
 
 const Alexa = require('ask-sdk-core');
 const Habits = require('./habits');
+const Display = require('./display/display');
 
 //constants
 const WELCOME_MESSAGE = 'Welcome to Habits skill.';
@@ -11,6 +12,7 @@ const ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t u
 const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
 const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
+const IMAGE_URL = 'https://s3-ap-northeast-1.amazonaws.com/alexa-habit-skill-image/canadian-waterfall.jpg';
 
 // launch-request intent handler
 const LauchRequestHandler = {
@@ -23,9 +25,25 @@ const LauchRequestHandler = {
         attributes.counter = 0;
         attributes.repeat = null;
         handlerInput.attributesManager.setSessionAttributes(attributes);
-
+        
+        var response = "";
         const speechText = WELCOME_MESSAGE;
-        return handlerInput.responseBuilder
+        
+        if(Display.supportDisplay(handlerInput)) {
+            const display_type = 'BodyTemplate2';
+            const display_habbit = null;
+            const display_reason = null;
+            response = Display.getDisplay(handlerInput.responseBuilder,  
+                                        IMAGE_URL,
+                                        display_type, 
+                                        display_habbit, 
+                                        display_reason);
+        }else {
+            response = handlerInput.responseBuilder;
+        }
+
+        //return handlerInput.responseBuilder
+        return response
             .speak(speechText)
             .reprompt(speechText)
             .getResponse();
@@ -48,9 +66,22 @@ const GetHabitIntentHandler = {
         attributes.repeat = REPEAT_HABIT;
         handlerInput.attributesManager.setSessionAttributes(attributes);
 
+        var response = "";
         const speechText = getHabitMessage(handlerInput);
 
-        return handlerInput.responseBuilder
+        if(Display.supportDisplay(handlerInput)) {
+            const display_type = 'BodyTemplate2';
+            const display_reason = null;
+            response = Display.getDisplay(handlerInput.responseBuilder,  
+                                        IMAGE_URL,
+                                        display_type, 
+                                        speechText, 
+                                        display_reason);
+        }else {
+            response = handlerInput.responseBuilder;
+        }
+
+        return response
             .speak(speechText)
             .reprompt(speechText)
             .getResponse();
@@ -78,9 +109,22 @@ const GetHabitReasonIntentHandler = {
         attributes.repeat = REPEAT_REASON;
         handlerInput.attributesManager.setSessionAttributes(attributes);
 
+        var response = "";
         const speechText = getHabitReason(handlerInput);
 
-        return handlerInput.responseBuilder
+        if(Display.supportDisplay(handlerInput)) {
+            const display_type = 'BodyTemplate2';
+            const display_habbit = null;
+            response = Display.getDisplay(handlerInput.responseBuilder,  
+                                        IMAGE_URL,
+                                        display_type, 
+                                        display_habbit, 
+                                        speechText);
+        }else {
+            response = handlerInput.responseBuilder;
+        }
+
+        return response
             .speak(speechText)
             .reprompt(speechText)
             .getResponse();
@@ -103,14 +147,38 @@ const GetRepeatIntentHandler = {
         && handlerInput.requestEnvelope.request.intent.name === 'GetRepeatIntent';
     },
     handle(handlerInput) {
+        
+        var response = "";
+        var display_habbit = null;
+        var display_reason = null;
         const speechText = getRepeatMessage(handlerInput);
+        
+        if (Display.supportDisplay(handlerInput)) {
+            const attributes = handlerInput.attributesManager.getSessionAttributes();
+            const repeat = attributes.repeat;
 
-        return handlerInput.responseBuilder
+            if (repeat === REPEAT_HABIT) {
+                display_habbit = speechText;
+            } else if (repeat === REPEAT_REASON) {
+                display_reason = speechText;
+            }
+            const display_type = 'BodyTemplate2';
+            response = Display.getDisplay(handlerInput.responseBuilder,  
+                                            IMAGE_URL,
+                                            display_type, 
+                                            display_habbit, 
+                                            display_reason);
+        }
+        else {
+            response = handlerInput.responseBuilder;
+        }
+
+        return response
             .speak(speechText)
             .reprompt(speechText)
             .getResponse();
     }
-}
+};
 
 function getRepeatMessage(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
