@@ -28,7 +28,15 @@ module.exports = {
         const myReasonTextContent = new Alexa.RichTextContentHelper()
             .withPrimaryText('Reason : ' + display_reason + '<br/>')
             .getTextContent();
-        
+
+        const myHelpTextContent = new Alexa.RichTextContentHelper()
+            .withPrimaryText(display_habbit + '<br/>')
+            .getTextContent();
+            
+        const myEndTextContent = new Alexa.RichTextContentHelper()
+            .withPrimaryText(display_habbit + '<br/>')
+            .withSecondaryText('Thank you for using the HABIT skill!')
+            .getTextContent();
 
         if(display_habbit === null && display_reason === null)
         {
@@ -59,6 +67,26 @@ module.exports = {
                 title : 'Reason - HABIT Skill',
                 textContent : myReasonTextContent
             });
+        }
+        else if(display_habbit != null && display_reason != null){
+            if(display_reason === 'EndRequest'){
+                response.addRenderTemplateDirective({
+                    type : display_type,
+                    backButton : 'visible',
+                    backgroundImage : image,
+                    title : 'End - HABIT Skill',
+                    textContent : myEndTextContent
+                });
+            }
+            else if(display_reason === 'HelpRequest'){
+                response.addRenderTemplateDirective({
+                    type : display_type,
+                    backButton : 'visible',
+                    backgroundImage : image,
+                    title : 'Help - HABIT Skill',
+                    textContent : myHelpTextContent
+                });
+            }
         }
         return response;
     }
