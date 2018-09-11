@@ -8,7 +8,7 @@ const Display = require('./display/display');
 const WELCOME_MESSAGE = 'Welcome to Habits skill.';
 const HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good habit!';
 const GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
-const ERROR_MESSAGE = 'Some error happened, which was handled. Sorry, I don\'t understand. Please try again!';
+const ERROR_MESSAGE = 'Sorry, I don\'t understand. Please try again!';
 const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
 const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
@@ -203,7 +203,20 @@ const HelpIntentHandler = {
     handle(handlerInput) {
         const speechText = HELP_MESSAGE;
 
-        return handlerInput.responseBuilder
+        var response = "";
+        if(Display.supportDisplay(handlerInput)){
+            const display_type = 'BodyTemplate2';
+            const display_reason = 'HelpRequest';       //mapper for getDisplay
+            response = Display.getDisplay(handlerInput.responseBuilder,
+                                        IMAGE_URL,
+                                        display_type,
+                                        speechText,
+                                        display_reason);
+        }
+        else {
+            response = handlerInput.responseBuilder;
+        }
+        return response
             .speak(speechText)
             .reprompt(speechText)
             .getResponse();
@@ -220,7 +233,20 @@ const CancelAndStopIntentHandler = {
     handle(handlerInput) {
         const speechText = GOODBYE_MESSAGE;
 
-        return handlerInput.responseBuilder
+        var response = "";
+        if(Display.supportDisplay(handlerInput)){
+            const display_type = 'BodyTemplate2';
+            const display_reason = 'EndRequest';       //mapper for getDisplay
+            response = Display.getDisplay(handlerInput.responseBuilder,
+                                        IMAGE_URL,
+                                        display_type,
+                                        speechText,
+                                        display_reason);
+        }
+        else {
+            response = handlerInput.responseBuilder;
+        }
+        return response
             .speak(speechText)
             .getResponse();
     }
