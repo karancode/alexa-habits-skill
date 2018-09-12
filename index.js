@@ -22,7 +22,9 @@ const LauchRequestHandler = {
     handle(handlerInput){
         // initialize session counter
         const attributes = handlerInput.attributesManager.getSessionAttributes();
-        attributes.counter = 0;
+        const index = getRandom(Habits.data.length);
+        attributes.index = index;
+        attributes.counter = index;     //start with a random index.
         attributes.repeat = null;
         handlerInput.attributesManager.setSessionAttributes(attributes);
         
@@ -49,6 +51,10 @@ const LauchRequestHandler = {
             .getResponse();
     }
 };
+
+function getRandom(max){
+    return Math.floor(Math.random() * Math.floor(max));
+}
 
 // custom intent handlers
 const GetHabitIntentHandler = {
@@ -134,7 +140,7 @@ const GetHabitReasonIntentHandler = {
 
 function getHabitReason(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    if (attributes.counter - 1 < 0){
+    if (attributes.counter - 1 < attributes.index){
         return NO_HABIT_VALIDATION_MESSAGE;
     }
     const habit_reason = Habits.data[(attributes.counter - 1)%Habits.data.length].reason;
@@ -183,7 +189,7 @@ const GetRepeatIntentHandler = {
 function getRepeatMessage(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const repeat = attributes.repeat;
-    if (attributes.counter - 1 < 0){
+    if (attributes.counter - 1 < attributes.index){
         return NO_HABIT_VALIDATION_MESSAGE;
     }
     switch(repeat){
