@@ -14,6 +14,9 @@ const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
 const IMAGE_URL = 'https://s3-ap-northeast-1.amazonaws.com/alexa-habit-skill-image/canadian-waterfall.jpg';
 
+//index for random list
+const index = getRandom(Habits.data.length);
+
 // launch-request intent handler
 const LauchRequestHandler = {
     canHandle(handlerInput){
@@ -22,7 +25,9 @@ const LauchRequestHandler = {
     handle(handlerInput){
         // initialize session counter
         const attributes = handlerInput.attributesManager.getSessionAttributes();
-        attributes.counter = 0;
+        
+        attributes.index = index;
+        attributes.counter = index;     //start with a random index.
         attributes.repeat = null;
         handlerInput.attributesManager.setSessionAttributes(attributes);
         
@@ -50,6 +55,10 @@ const LauchRequestHandler = {
     }
 };
 
+function getRandom(max){
+    return Math.floor(Math.random() * Math.floor(max));
+}
+
 // custom intent handlers
 const GetHabitIntentHandler = {
     canHandle(handlerInput) {
@@ -63,6 +72,14 @@ const GetHabitIntentHandler = {
 
         //update repeat-attribute
         const attributes = handlerInput.attributesManager.getSessionAttributes();
+        
+        // if user directly asks for a habit.
+        if(typeof attributes.index === 'undefined' || attributes.index === null){
+            attributes.index = index;
+            attributes.counter = index;     //start with a random index.
+            attributes.repeat = null;
+        }
+    
         attributes.repeat = REPEAT_HABIT;
         handlerInput.attributesManager.setSessionAttributes(attributes);
 
@@ -91,7 +108,7 @@ const GetHabitIntentHandler = {
 // supporting functions
 function getHabitMessage(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    const habit_message = Habits.data[attributes.counter].habit;
+    const habit_message = Habits.data[(attributes.counter)%Habits.data.length].habit;
     attributes.counter = attributes.counter + 1;
     handlerInput.attributesManager.setSessionAttributes(attributes);
     return habit_message;
@@ -134,7 +151,7 @@ const GetHabitReasonIntentHandler = {
 
 function getHabitReason(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
-    if (attributes.counter - 1 < 0){
+    if (attributes.counter - 1 < attributes.index){
         return NO_HABIT_VALIDATION_MESSAGE;
     }
     const habit_reason = Habits.data[(attributes.counter - 1)%Habits.data.length].reason;
@@ -183,7 +200,7 @@ const GetRepeatIntentHandler = {
 function getRepeatMessage(handlerInput) {
     const attributes = handlerInput.attributesManager.getSessionAttributes();
     const repeat = attributes.repeat;
-    if (attributes.counter - 1 < 0){
+    if (attributes.counter - 1 < attributes.index){
         return NO_HABIT_VALIDATION_MESSAGE;
     }
     switch(repeat){
