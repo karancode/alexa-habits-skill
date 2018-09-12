@@ -14,6 +14,9 @@ const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
 const IMAGE_URL = 'https://s3-ap-northeast-1.amazonaws.com/alexa-habit-skill-image/canadian-waterfall.jpg';
 
+//index for random list
+const index = getRandom(Habits.data.length);
+
 // launch-request intent handler
 const LauchRequestHandler = {
     canHandle(handlerInput){
@@ -22,7 +25,7 @@ const LauchRequestHandler = {
     handle(handlerInput){
         // initialize session counter
         const attributes = handlerInput.attributesManager.getSessionAttributes();
-        const index = getRandom(Habits.data.length);
+        
         attributes.index = index;
         attributes.counter = index;     //start with a random index.
         attributes.repeat = null;
@@ -69,6 +72,14 @@ const GetHabitIntentHandler = {
 
         //update repeat-attribute
         const attributes = handlerInput.attributesManager.getSessionAttributes();
+        
+        // if user directly asks for a habit.
+        if(typeof attributes.index === 'undefined' || attributes.index === null){
+            attributes.index = index;
+            attributes.counter = index;     //start with a random index.
+            attributes.repeat = null;
+        }
+    
         attributes.repeat = REPEAT_HABIT;
         handlerInput.attributesManager.setSessionAttributes(attributes);
 
