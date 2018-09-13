@@ -14,3 +14,6 @@ Alexa's _`Habit Skill`_ will tell the reason to follow the habit.<br/>
 If the user knows or already follows the habit, he can ask for another/next habit.<br/>
 ...
 
+## Example
+* You can check the demo video [here](https://www.youtube.com/watch?v=2MT2tHOro9Q)! 
+* PS : leave a like if you like #goodhabit :)
