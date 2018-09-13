@@ -37,6 +37,7 @@
                     "name": "GetHabitReasonIntent",
                     "slots": [],
                     "samples": [
+                        "why should I follow this",
                         "Reason",
                         "what's the reason",
                         "Why is it good ",
@@ -47,6 +48,8 @@
                     "name": "GetNextHabitIntent",
                     "slots": [],
                     "samples": [
+                        "I know this",
+                        "I know this tell me another",
                         "one more",
                         "Tell me another habit",
                         "Another habit",
