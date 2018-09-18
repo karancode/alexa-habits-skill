@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "habits",
+            "invocationName": "good habits",
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",

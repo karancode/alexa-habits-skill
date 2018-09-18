@@ -164,32 +164,41 @@ const GetRepeatIntentHandler = {
         && handlerInput.requestEnvelope.request.intent.name === 'GetRepeatIntent';
     },
     handle(handlerInput) {
-        
+       
         var response = "";
-        var display_habbit = null;
-        var display_reason = null;
-        const speechText = getRepeatMessage(handlerInput);
-        
-        if (Display.supportDisplay(handlerInput)) {
-            const attributes = handlerInput.attributesManager.getSessionAttributes();
-            const repeat = attributes.repeat;
+        var speechText = "";
+        //if user directly asks to repeat
+        const attributes = handlerInput.attributesManager.getSessionAttributes();
 
-            if (repeat === REPEAT_HABIT) {
-                display_habbit = speechText;
-            } else if (repeat === REPEAT_REASON) {
-                display_reason = speechText;
-            }
-            const display_type = 'BodyTemplate2';
-            response = Display.getDisplay(handlerInput.responseBuilder,  
-                                            IMAGE_URL,
-                                            display_type, 
-                                            display_habbit, 
-                                            display_reason);
-        }
-        else {
+        if (attributes.repeat === null || attributes.repeat === undefined){
+            speechText = NO_HABIT_VALIDATION_MESSAGE;
             response = handlerInput.responseBuilder;
-        }
+        }   
+        else {
+            var display_habbit = null;
+            var display_reason = null;
+            speechText = getRepeatMessage(handlerInput);
 
+            if (Display.supportDisplay(handlerInput)) {
+                const attributes = handlerInput.attributesManager.getSessionAttributes();
+                const repeat = attributes.repeat;
+
+                if (repeat === REPEAT_HABIT) {
+                    display_habbit = speechText;
+                } else if (repeat === REPEAT_REASON) {
+                    display_reason = speechText;
+                }
+                const display_type = 'BodyTemplate2';
+                response = Display.getDisplay(handlerInput.responseBuilder,
+                    IMAGE_URL,
+                    display_type,
+                    display_habbit,
+                    display_reason);
+            }
+            else {
+                response = handlerInput.responseBuilder;
+            }
+        }
         return response
             .speak(speechText)
             .reprompt(speechText)
