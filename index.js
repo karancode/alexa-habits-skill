@@ -5,11 +5,12 @@ const Habits = require('./habits');
 const Display = require('./display/display');
 
 //constants
-const WELCOME_MESSAGE = 'Welcome to Habits skill.';
-const HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good habit!';
+const WELCOME_MESSAGE = 'Welcome to Habits skill. You can say, \'Tell me a habit\' to learn some good habits. Please say \'Help\' for detailed guidance';
+const HELP_MESSAGE = 'You can say, ask habits for something good. Or, tell me a good habit! After learning the habit you can \'good habits\' for the reason why you should follow the habit. To get the reason for the habit, say \'Why should I follow this\'. If at any point you want \'good habits\' repeat itself, just say \'say again\'. To end you can just greet, say \'Thank you\'. So, would you like to know any good habit ?';
 const GOODBYE_MESSAGE = 'Learn Good! ByeBye!';
 const ERROR_MESSAGE = 'Sorry, I don\'t understand. Please try again!';
 const NO_HABIT_VALIDATION_MESSAGE = 'Please ask for a Habit first! You can say, tell me a habit!';
+const REPROMT_MESSAGE = 'Would you like to learn more ?';
 const REPEAT_HABIT = 'habit';
 const REPEAT_REASON = 'reason';
 const IMAGE_URL = 'https://s3-ap-northeast-1.amazonaws.com/alexa-habit-skill-image/canadian-waterfall.jpg';
@@ -50,7 +51,7 @@ const LauchRequestHandler = {
         //return handlerInput.responseBuilder
         return response
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt(REPROMT_MESSAGE)
             .getResponse();
     }
 };
@@ -100,7 +101,7 @@ const GetHabitIntentHandler = {
 
         return response
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt(REPROMT_MESSAGE)
             .getResponse();
     }
 };
@@ -143,7 +144,7 @@ const GetHabitReasonIntentHandler = {
 
         return response
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt(REPROMT_MESSAGE)
             .getResponse();
     }
 };
@@ -201,7 +202,7 @@ const GetRepeatIntentHandler = {
         }
         return response
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt(REPROMT_MESSAGE)
             .getResponse();
     }
 };
@@ -244,7 +245,7 @@ const HelpIntentHandler = {
         }
         return response
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt(REPROMT_MESSAGE)
             .getResponse();
     }
 };
@@ -299,7 +300,7 @@ const ErrorHandler = {
         
         return handlerInput.responseBuilder
             .speak(speechText)
-            .reprompt(speechText)
+            .reprompt(REPROMT_MESSAGE)
             .getResponse();
     }
 };
