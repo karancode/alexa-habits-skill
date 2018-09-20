@@ -255,7 +255,8 @@ const CancelAndStopIntentHandler = {
         return handlerInput.requestEnvelope.request.type === 'IntentRequest'
         && (handlerInput.requestEnvelope.request.intent.name === 'AMAZON.CancelIntent'
             || handlerInput.requestEnvelope.request.intent.name === 'GetEndIntent'      //end intent same as stop/cancel
-            || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent');
+            || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.StopIntent'
+            || handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NoIntent');
     },
     handle(handlerInput) {
         const speechText = GOODBYE_MESSAGE;
